@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Light: a luminous bone light-table ─────────────────────────────────── */
+body {
+  background-color: #f4efe6;
+  background-image:
+    radial-gradient(1200px 760px at 8% -10%, rgba(255, 255, 255, 0.8), transparent 60%),
+    radial-gradient(1100px 820px at 110% 4%, rgba(232, 137, 59, 0.1), transparent 55%),
+    radial-gradient(1000px 1000px at 50% 122%, rgba(58, 166, 160, 0.06), transparent 60%);
+  background-attachment: fixed;
+  color: #1c1813;
+  font-family: "Archivo", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Dark: the darkroom, lit by the safelight ───────────────────────────── */
+html.dark body {
+  background-color: #100d0a;
+  background-image:
+    radial-gradient(1200px 760px at 10% -10%, rgba(232, 137, 59, 0.1), transparent 58%),
+    radial-gradient(1100px 820px at 108% 6%, rgba(58, 166, 160, 0.08), transparent 55%),
+    radial-gradient(1000px 1000px at 50% 124%, rgba(232, 137, 59, 0.05), transparent 60%);
+  color: #f4efe6;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* A hairline seam used as a divider motif */
+.seam {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(28, 24, 19, 0.18) 18%,
+    rgba(28, 24, 19, 0.18) 82%,
+    transparent
+  );
+}
+html.dark .seam {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(244, 239, 230, 0.16) 18%,
+    rgba(244, 239, 230, 0.16) 82%,
+    transparent
+  );
+}
+
+/* thin scrollbars for tab strips + scroll regions */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 111, 93, 0.5) transparent;
+}
+.thin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(122, 111, 93, 0.45);
+  border-radius: 99px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* dragging affordance for board pins */
+.dragging {
+  opacity: 0.45;
+}
+.drop-target {
+  outline: 2px dashed rgba(232, 137, 59, 0.7);
+  outline-offset: -3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#16130f" />
+    <meta
+      name="description"
+      content="L'Imagier — table lumineuse pour cinéastes. Dépose tes images, Claude les tague, assemble des planches d'ambiance, et révèle la ligne directrice de ton regard."
+    />
+    <title>L'Imagier — la table lumineuse du regard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Daily-app open beacon: records that this app was opened today in the
+         dashboard's Firestore. Fire-and-forget; never blocks the UI. -->
+    <script>
+      (function () {
+        try {
+          var APP_ID = 'imagier';
+          var KEY = 'AIzaSyC2xUjWzIU35j_frmg6yI-JigW8ehKZVKQ';
+          var DOC = 'https://firestore.googleapis.com/v1/projects/charlotte-dashboard' +
+            '/databases/(default)/documents/daily_apps/' + APP_ID;
+          var today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Moncton' });
+          fetch(DOC + '?key=' + KEY)
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (doc) {
+              var arr = doc && doc.fields && doc.fields.openedDates &&
+                doc.fields.openedDates.arrayValue && doc.fields.openedDates.arrayValue.values;
+              var dates = (arr || []).map(function (v) { return v.stringValue; });
+              if (dates.indexOf(today) !== -1) return;
+              dates.push(today);
+              return fetch(DOC + '?key=' + KEY + '&updateMask.fieldPaths=openedDates', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields: { openedDates: { arrayValue: { values:
+                  dates.map(function (d) { return { stringValue: d }; }) } } } }),
+                keepalive: true
+              });
+            })
+            .catch(function () {});
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
